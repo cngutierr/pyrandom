@@ -37,43 +37,7 @@ def usage():
   print "Usage: %s <iterations> <output>" % os.path.basename(sys.argv[0])
 
 def get_seed():
-  # Get system uptime to use as the seed
-  if sys.platform.startswith('win'):
-    process = subprocess.Popen('net statistics server', stdout=subprocess.PIPE)
-    output, err = process.communicate()
-    output = output.splitlines()
-
-    for line in output:
-      if "Statistics since" in line:
-        uptime = line
-
-    uptime = uptime.split(" ")
-
-    ## Sadly, the fact that Python's DateTime doesn't understand non zero-padded minutes ruined this oneliner for me :/
-    # date = datetime.strptime(" ".join(uptime[2:]), "%m/%d/%y %H:%M:%S %p")
-
-    date, ptime, meridian = uptime[2:]
-
-    time = []
-
-    for unit in ptime.split(':'):
-      time.append(unit.zfill(2))
-
-    time = ":".join(time)
-
-    date = datetime.strptime(" ".join([date, time, meridian]), "%m/%d/%Y %H:%M:%S %p")
-
-    uptime = datetime.now() - date
-
-    return uptime.total_seconds()
-
-  else:
-    with open('/proc/uptime', 'r') as f:
-      uptime_seconds = float(f.readline().split()[0])
-      uptime_seconds = timedelta(seconds = uptime_seconds)
-      uptime = datetime.now() - uptime_seconds
-
-      return uptime.total_seconds()
+  return 1
 
 def lcg(seed):
   # Preset numbers obtained from a TRUE random number generator. 

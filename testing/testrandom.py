@@ -58,8 +58,11 @@ header=""
 index=0
 
 # set default value, which tests should be performed
-if len(args.tests)>=1: testlist=args.tests
-else: testlist=range(1,16)
+if len(args.tests) >= 1:
+    testlist = args.tests
+else:
+    testlist = range(1, 16)
+
 ltst=len(testlist)
 
 # define the separator for the following outputs
