@@ -295,8 +295,8 @@ def cumultativesumstest(binin):
     cs = np.cumsum(sc)
     z = max(abs(cs))
     ra = 0
-    start = int(np.floor(0.25 * np.floor(-n / z) + 1))
-    stop = int(np.floor(0.25 * np.floor(n / z) - 1))
+    start = int(np.floor(0.25 * (np.floor(-n / z) + 1)))
+    stop = int(np.floor(0.25 * (np.floor(n / z) - 1)))
     pv1 = []
     for k in xrange(start, stop + 1):
         pv1.append(sst.norm.cdf((4 * k + 1) * z / np.sqrt(n)) - sst.norm.cdf((4 * k - 1) * z / np.sqrt(n)))

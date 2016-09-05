@@ -53,7 +53,13 @@ def performrndtest(filename, inputbits, testlist):
     out_vals = list()
     out_vals.append(filename)
     for i in testlist:
-        out_vals.append(round(eval("randtest." + tests[i])(inputbits), 4))
+        try:
+            out_vals.append(round(eval("randtest." + tests[i])(inputbits), 4))
+        except Exception as e:
+            print e
+            print out_vals
+            print inputbits
+            print filename
     return out_vals
 
 
@@ -63,7 +69,7 @@ def write_results(results):
         cur.execute(INSERT_PRELIM, tuple(results))
     print "Wrote results for %s" % results[0]
 
-def run_small_randtest_async(samples_dir="samples/*"):
+def run_small_randtest_async(samples_dir="samples/benign_testing/[0-9]*/*"):
     # get all the file names in samples_dir
     files = glob.glob(samples_dir)
     print files
