@@ -1,4 +1,3 @@
-import argparse
 import sys
 import randtest
 import time
