@@ -255,7 +255,7 @@ def lempelzivcompressiontest(binin):
 
 
 # test 2.11
-def serialtest(binin, m=16):
+def serialtest(binin, m=4):
     ''' The focus of this test is the frequency of each and every overlapping m-bit pattern across the entire sequence. The purpose of this test is to determine whether the number of occurrences of the 2m m-bit overlapping patterns is approximately the same as would be expected for a random sequence. The pattern can overlap.'''
     n = len(binin)
     hbin=binin+binin[0:m-1:]
@@ -268,9 +268,6 @@ def serialtest(binin, m=16):
     f2 = [f2a.count(xs)**2 for xs in set(f2a)]
     f3a = [hbin[xs:m-2+xs:] for xs in xrange(n)]
     f3 = [f3a.count(xs)**2 for xs in set(f3a)]
-    psim1 = 0
-    psim2 = 0
-    psim3 = 0
     if m >= 0:
         suss = reduce(su,f1)
         psim1 = 1.0 * 2 ** m * suss / n - n
@@ -282,6 +279,9 @@ def serialtest(binin, m=16):
         psim3 = 1.0 * 2 ** (m - 2) * suss / n - n
     d1 = psim1-psim2
     d2 = psim1-2 * psim2 + psim3
+    # avoid nan... if we have negatives, its not a random dist.
+    if d1 < 0 and d2 < 0:
+        return [0.0, 0.0]
     pval1 = spc.gammaincc(2 ** (m - 2), d1 / 2.0)
     pval2 = spc.gammaincc(2 ** (m - 3), d2 / 2.0)
     return [pval1, pval2]
@@ -374,7 +374,7 @@ def randomexcursionsvarianttest(binin):
             pval.append(spc.erfc(np.abs(getfreq(li, xs) - j) / np.sqrt(2 * j * (4 * np.abs(xs) - 2))))
     return pval
 
-def aproximateentropytest(binin, m=10):
+def aproximateentropytest(binin, m=2):
     ''' The focus of this test is the frequency of each and every overlapping m-bit pattern. The purpose of the test is to compare the frequency of overlapping blocks of two consecutive/adjacent lengths (m and m+1) against the expected result for a random sequence.'''
     n = len(binin)
     f1a = [(binin + binin[0:m - 1:])[xs:m + xs:] for xs in xrange(n)]
@@ -489,7 +489,7 @@ def testall(bits):
     print 'spectraltest\t\t\t\t', spectraltest(bits)
     print 'nonoverlappingtemplatematching\t\t',nonoverlappingtemplatematching(bits, '1001', 10)
     print 'overlapingtemplatematching\t\t',overlapingtemplatematching(bits, '100', 12, 5)
-    print 'serialtest\t\t\t\t', serialtest(bits, 10)
+    print 'serialtest\t\t\t\t', serialtest(bits, 2)
     print 'cumulativesumstest\t\t\t', cumulativesumstest(bits)
     print 'aproximateentropytest\t\t\t', aproximateentropytest(bits, 4)
     print 'randomexcursionsvarianttest\t\t', randomexcursionsvarianttest(bits)
